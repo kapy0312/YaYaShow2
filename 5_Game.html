@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>雅一最懂你</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('img/5_BackgroundGame.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 120vh;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 80%;
+            max-width: 1300px;
+            margin-top: 150px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .question {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            flex-grow: 1;
+            padding-right: 20px;
+        }
+
+        .next-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s;
+        }
+
+        .next-btn:hover {
+            background-color: #e05555;
+        }
+
+        /* .options {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        } */
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 30px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .option {
+            border: 6px solid transparent;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: border 0.3s, transform 0.2s;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        .option.selected {
+            border-color: #ff3333;
+            transform: scale(1.03);
+        }
+
+        .option img {
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+        }
+
+        /* .bomb-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-top: 30px;
+            padding: 20px;
+            border: 3px dashed #ffcc00;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        } */
+
+        .bomb-container {
+            position: absolute;
+            bottom: -50px;
+            right: 30px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            padding: 20px;
+            border: 3px dashed #ffcc00;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .bomb-image {
+            animation: pulse 1s infinite alternate;
+            transition: width 0.3s, height 0.3s;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.25);
+            }
+        }
+
+        .bomb-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .bomb-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: 2px solid #ffaa00;
+            background-color: #fff2cc;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 2px 2px 6px #aaa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="question" id="question">載入中...</div>
+        <button class="next-btn" onclick="nextQuestion()">下一題</button>
+    </div>
+
+    <div class="options">
+        <div class="option" data-option="A"><img id="imgA" src="" alt="A"></div>
+        <div class="option" data-option="B"><img id="imgB" src="" alt="B"></div>
+        <div class="option" data-option="C"><img id="imgC" src="" alt="C"></div>
+        <div class="option" data-option="D"><img id="imgD" src="" alt="D"></div>
+    </div>
+
+    <div class="bomb-container">
+        <img id="bombImage" class="bomb-image" src="img/bomb1.png" width="100" height="100" alt="炸彈">
+        <div class="bomb-buttons">
+            <button class="bomb-btn" onclick="changeStage(-1)">-</button>
+            <button class="bomb-btn" onclick="changeStage(1)">+</button>
+        </div>
+    </div>
+
+    <script>
+        const STR = [
+            "1. 請問如果給你選擇霧眉方案，你會優先考慮哪種？",
+            "2. 請問以下哪隻熊最聰明？",
+            "3. 請問以下傳說對決的角色，哪隻你最強？",
+            "4. 請問哪個車輪餅是玉米濃湯口味的？",
+            "5. 如果你到了異世界能選一把武器，你要選？",
+            "6. 如果今天要幫慈慈選一件衣服，請問你會選？",
+            "7. 請問以下哪位最帥？"
+        ];
+
+        let currentIndex = 0;
+        const totalQuestions = STR.length;
+
+        const questionEl = document.getElementById("question");
+        const imgA = document.getElementById("imgA");
+        const imgB = document.getElementById("imgB");
+        const imgC = document.getElementById("imgC");
+        const imgD = document.getElementById("imgD");
+        const options = document.querySelectorAll('.option');
+
+        // 點選圖片時切換紅框
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                // 如果已經是選取狀態，就取消選取
+                if (option.classList.contains('selected')) {
+                    option.classList.remove('selected');
+                } else {
+                    options.forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                }
+            });
+        });
+
+        // 顯示題目與圖片
+        function showQuestion(index) {
+            const num = index + 1; // 題號從1開始
+            questionEl.textContent = STR[index];
+            imgA.src = `img/Topic/P${num}_A.png`;
+            imgB.src = `img/Topic/P${num}_B.png`;
+            imgC.src = `img/Topic/P${num}_C.png`;
+            imgD.src = `img/Topic/P${num}_D.png`;
+
+            // 清除選取狀態
+            options.forEach(o => o.classList.remove('selected'));
+        }
+
+        // 下一題邏輯
+        function nextQuestion() {
+            if (currentIndex < totalQuestions - 1) {
+                currentIndex++;
+                showQuestion(currentIndex);
+            } else {
+                alert("已經是最後一題！");
+            }
+        }
+
+        // 初始載入第一題
+        showQuestion(currentIndex);
+
+        // 炸彈階段控制
+        const bombImage = document.getElementById('bombImage');
+        let bombStage = 1;
+
+        const bombData = {
+            1: { src: 'img/bomb1.png', size: 100 },
+            2: { src: 'img/bomb2.png', size: 200 },
+            3: { src: 'img/bomb3.png', size: 300 },
+            4: { src: 'img/bomb4.gif', size: 400 }
+        };
+
+        function changeStage(delta) {
+            bombStage += delta;
+            if (bombStage < 1) bombStage = 1;
+            if (bombStage > 4) bombStage = 4;
+
+            const data = bombData[bombStage];
+            bombImage.src = data.src;
+            bombImage.width = data.size;
+            bombImage.height = data.size;
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,154 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    /* 底層背景圖片 */
+    background-image: url('img/Background2.png');
+    background-size: cover;
+    /* 確保背景圖片覆蓋整個視窗 */
+    background-position: top left;
+    /* 背景圖片固定在左上角 */
+    background-repeat: no-repeat;
+    /* 不重複背景圖片 */
+    height: 100vh;
+    /* 使背景圖片的高度為視窗高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background-color: transparent;
+    /* 移除背景或設置為透明 */
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    gap: 20px;
+}
+
+.character-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    /* 增加間距，您可以根據需要調整數值 */
+}
+
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 120px);
+    /* 更新列的寬度 */
+    grid-gap: 20px;
+    /* 增加方框之間的間隔 */
+    margin-bottom: 20px;
+}
+
+.character-box {
+    width: 120px;
+    /* 調整方框寬度 */
+    height: 120px;
+    /* 調整方框高度 */
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    transition: border 0.3s;
+}
+
+.character-box img {
+    width: 120px;
+    /* 調整縮圖寬度 */
+    height: 120px;
+    /* 調整縮圖高度 */
+    object-fit: cover;
+    border-radius: 3px;
+}
+
+.character-box.selected {
+    border: 6px solid red;
+}
+
+.character-info {
+    display: flex;
+    flex-direction: column;
+    /* 讓圖示和文字垂直排列 */
+    justify-content: center;
+    align-items: center;
+}
+
+.character-info img {
+    width: 500px;
+    /* 與左側方框同寬 */
+    height: 500px;
+    /* 與左側方框同高 */
+    object-fit: cover;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+}
+
+.character-info .character-name {
+    margin-top: 10px;
+    /* 圖示與文字之間的距離 */
+    font-size: 32px;
+    text-align: center;
+    color: white;
+}
+
+.selected-list-container {
+    display: flex;
+    /* 設置為 flex 以方便控制排列 */
+    flex-direction: column;
+    /* 縮圖垂直排列 */
+    align-items: flex-start;
+    /* 縮圖與大圖頂部對齊 */
+    gap: 20px;
+    /* 可以調整大圖與縮圖列表的間距 */
+}
+
+.selected-list {
+    display: flex;
+    flex-wrap: wrap; /* 允許換行 */
+    gap: 10px; /* 縮圖之間的間距 */
+    max-width: 360px; /* 設定最大寬度以便於適應屏幕大小 */
+}
+
+.thumbnail {
+    width: 120px; /* 縮圖寬度 */
+    height: 120px; /* 縮圖高度 */
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#random-button {
+    padding: 20px 40px;
+    font-size: 32px;
+    cursor: pointer;
+    border: none;
+    background-color: white;
+    color: #007BFF;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#random-button:hover {
+    background-color: #a5c7eb;
+}
+
+#start-button {
+    padding: 20px 40px;
+    font-size: 32px;
+    cursor: pointer;
+    border: none;
+    background-color: white;
+    color: #ff0073;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#start-button:hover {
+    background-color: #e09d9e;
+}

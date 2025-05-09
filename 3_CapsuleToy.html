@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <title>雅一最懂你</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 載入 CSS 和 JS 套件 -->
+    <!-- Font Awesome 圖示 -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <!-- 動畫 CSS -->
+    <link rel="stylesheet" type="text/css" href="css/CapsuleToy_animate.css">
+    <!-- 自訂樣式 -->
+    <link rel="stylesheet" href="css/CapsuleToy_style.css">
+    <!-- WOW.js 初始化動畫效果 -->
+    <script src="js/wow.min.js"></script>
+    <script>new WOW().init();</script>
+    <!-- jQuery 函式庫 -->
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <div class="pond">
+                <!-- 背景用水池動畫 -->
+                <span></span>
+                <span></span>
+            </div>
+            <!-- 背景裝飾圖 -->
+            <!-- <img src="img/CapsuleToy/header-leftup.svg" class="wow leftup"> -->
+            <!-- <img src="img/CapsuleToy/header-leftup.png" class="wow leftup"> -->
+            <!-- <img src="img/CapsuleToy/header-leftdown.svg" class="wow leftdown"> -->
+            <!-- <img src="img/CapsuleToy/header-rightdown.svg" class="wow rightdown"> -->
+            <!-- <img src="img/CapsuleToy/header-con1.svg" class="con1 con"> -->
+            <!-- <img src="img/CapsuleToy/header-con1.svg" class="con2 con"> -->
+            <!-- <img src="img/CapsuleToy/header-con1.svg" class="con3 con"> -->
+
+            <div class="header">
+                <!-- 桌機版扭蛋機 -->
+                <div class="container">
+                    <div class="machine">
+                        <div class="head">
+                            <div class="tit">
+                                <img src="img/CapsuleToy/tit-head.png">
+                                <canvas id="myCanvas" width="440px" height="400px"></canvas> <!-- 扭蛋動畫 -->
+                            </div>
+                        </div>
+                        <div class="bod bodAr">
+                            <!-- 5 顆球 -->
+                            <div class="ball">
+                                <a href=""><img src="img/CapsuleToy/ball1.png" id="ball1"></a>
+                                <a href=""><img src="img/CapsuleToy/ball2.png" id="ball2"></a>
+                                <a href=""><img src="img/CapsuleToy/ball3.png" id="ball3"></a>
+                                <a href=""><img src="img/CapsuleToy/ball4.png" id="ball4"></a>
+                                <a href=""><img src="img/CapsuleToy/ball5.png" id="ball5"></a>
+                            </div>
+                            <!-- 扭蛋機結構圖片 -->
+                            <img src="img/CapsuleToy/bod-2.png" class="bod2">
+                            <img src="img/CapsuleToy/bod-3.png" class="bod3">
+                            <!-- 開關按鈕 -->
+                            <a href="" id="switch" class="switch"><img src="img/CapsuleToy/machine-switch.png"></a>
+                        </div>
+                    </div>
+
+                    <!-- 手機版扭蛋機 -->
+                    <div class="mobile-machine">
+                        <img src="img/CapsuleToy/header-fish-m.png" class="fishM">
+                        <div class="head">
+                            <div class="tit">
+                                <img src="img/CapsuleToy/tit-head-m.png">
+                                <canvas id="moCanvas" class="opa" width="300px" height="274px"></canvas>
+                            </div>
+                        </div>
+                        <div class="bod bodAr">
+                            <!-- 手機版球 -->
+                            <div class="ball">
+                                <a href=""><img src="img/CapsuleToy/ball1.png" id="ball1"></a>
+                                <a href=""><img src="img/CapsuleToy/ball2.png" id="ball2"></a>
+                                <a href=""><img src="img/CapsuleToy/ball3.png" id="ball3"></a>
+                                <a href=""><img src="img/CapsuleToy/ball4.png" id="ball4"></a>
+                                <a href=""><img src="img/CapsuleToy/ball5.png" id="ball5"></a>
+                            </div>
+                            <img src="img/CapsuleToy/bod-2.png" class="bod2">
+                            <img src="img/CapsuleToy/bod-3.png" class="bod3">
+                            <a href="" id="switch" class="switch"><img src="img/CapsuleToy/machine-switch.png"></a>
+                        </div>
+                    </div>
+
+                    <!-- 右邊：2x4 圖片區塊 -->
+                    <div class="thumbnail-grid">
+                        <!-- 範例圖片，請替換 src -->
+                        <img src="img/Challenger/P0.png" id="thumb1" alt="">
+                        <img src="img/Challenger/P0.png" id="thumb2" alt="">
+                        <img src="img/Challenger/P0.png" id="thumb3" alt="">
+                        <img src="img/Challenger/P0.png" id="thumb4" alt="">
+                        <img src="img/Challenger/P0.png" id="thumb5" alt="">
+                        <img src="img/Challenger/P0.png" id="thumb6" alt="">
+                        <img src="img/Challenger/P0.png" id="thumb7" alt="">
+                        <img src="img/Challenger/P0.png" id="thumb8" alt="">
+                    </div>
+
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <img src="img/CapsuleToy/main-head.svg">
+            <div class="warn">
+                <p class="star">使用步驟：</p>
+                <div class="warnCon">
+                    <p>1.點取start按鈕即可開始轉蛋。</p>
+                    <p>2.點開掉出來的球。</p>
+                </div>
+            </div>
+
+            <!-- <a href="4_Rule.html" class="btn">
+                Next
+                <span></span><span></span><span></span><span></span>
+            </a> -->
+            <a href="4_Rule.html">
+                <button id="floatButton">Next</button>
+            </a>
+        </main>
+
+        <footer>網站為作業練習用無任何商業用途</footer>
+    </div>
+    <script src="js/all.js"></script> <!-- 核心 JS 功能 -->
+</body>
+
+</html>
