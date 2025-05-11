@@ -42,6 +42,11 @@ $('.switch').click(function (e) {
   setTimeout(function () {
     $('.bod .ball').css('z-index', '10');
     ballStatus = [];
+
+    // ✅ 播放彈跳音效（每次建立新實例）
+    const Sound_bounce = new Audio('music/音效_轉蛋動畫.mp3');
+    Sound_bounce.play();
+
     init(); // 初始化動畫
     $('.switchRotate').removeClass('switchRotate');
   }, 800);
@@ -52,21 +57,6 @@ $('.switch').click(function (e) {
     $('#moCanvas').removeClass('opa');
   }
 });
-
-// 初始化球物件並開始動畫
-// function init() {
-//   for (let i = 0; i < ballNum; i++) {
-//     awardList[i] = new Ball(i, ballList[i]);
-//     ballStatus.push({ name: `ball-${i}`, count: 0 });
-//   }
-//   window.clearInterval(timer);
-//   timer = setInterval(function () {
-//     ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除畫布
-//     for (let i = 0; i < awardList.length; i++) {
-//       awardList[i].run(i); // 執行每顆球的動畫
-//     }
-//   }, 1);
-// }
 
 // 初始化球物件並開始動畫
 function init() {
@@ -91,6 +81,7 @@ function init() {
     }
   }, 1);
 }
+
 
 // 定義 Ball 類別（建構球物件）
 function Ball(index, img) {
@@ -161,6 +152,10 @@ function drop() {
 
   $target.addClass('finalA');
   $target.click(function (e) {
+    const Sound_Wining = new Audio('music/音效_開獎.mp3');
+    Sound_Wining.volume = 0.3; // 設定音量為 50%
+    Sound_Wining.play();
+
     e.preventDefault();
     // $('.wrap').append(`
     //   <div class="lightbg">

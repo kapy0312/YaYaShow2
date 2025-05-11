@@ -153,13 +153,17 @@
             box-shadow: 2px 2px 6px #aaa;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 
 <body>
 
     <div class="header">
         <div class="question" id="question">載入中...</div>
-        <button class="next-btn" onclick="nextQuestion()">下一題</button>
+        <button class="next-btn" onclick="backQuestion()">上一題</button>
+        <button class="next-btn" onclick="nextQuestion()" style="margin-left: 20px;">下一題</button>
+        <button class="next-btn" onclick="fireworks()" style="margin-left: 20px;">答對</button>
+        <button class="next-btn" onclick="fireworks()" style="margin-left: 20px;">答錯</button>
     </div>
 
     <div class="options">
@@ -177,8 +181,15 @@
         </div>
     </div>
 
+    <canvas id="fireworksCanvas"
+        style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
+
+    <audio id="Sound_fireworksCanvas" src="music/音效_煙火.mp3"></audio>
+    <audio id="Sound_redSelect" src="music/音效_紅框選取.mp3"></audio>
+
     <script>
         const STR = [
+            "0. 請問天竺鼠車車的保險要保哪種？(示範題)",
             "1. 請問如果給你選擇霧眉方案，你會優先考慮哪種？",
             "2. 請問以下哪隻熊最聰明？",
             "3. 請問以下傳說對決的角色，哪隻你最強？",
@@ -201,6 +212,11 @@
         // 點選圖片時切換紅框
         options.forEach(option => {
             option.addEventListener('click', () => {
+
+                const sound_Red = document.getElementById("Sound_redSelect");
+                sound_Red.currentTime = 0;
+                sound_Red.play();
+
                 // 如果已經是選取狀態，就取消選取
                 if (option.classList.contains('selected')) {
                     option.classList.remove('selected');
@@ -213,7 +229,7 @@
 
         // 顯示題目與圖片
         function showQuestion(index) {
-            const num = index + 1; // 題號從1開始
+            const num = index; // 題號從0開始
             questionEl.textContent = STR[index];
             imgA.src = `img/Topic/P${num}_A.png`;
             imgB.src = `img/Topic/P${num}_B.png`;
@@ -222,6 +238,16 @@
 
             // 清除選取狀態
             options.forEach(o => o.classList.remove('selected'));
+        }
+
+        // 上一題邏輯
+        function backQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showQuestion(currentIndex);
+            } else {
+                alert("已經是第零題了！");
+            }
         }
 
         // 下一題邏輯
@@ -257,6 +283,39 @@
             bombImage.src = data.src;
             bombImage.width = data.size;
             bombImage.height = data.size;
+        }
+
+        function fireworks() {
+            const duration = 2 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+            const sound_fire = document.getElementById("Sound_fireworksCanvas");
+            sound_fire.currentTime = 0;
+            sound_fire.play();
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function () {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+
+                // 左右兩側繽紛炸開
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                }));
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                }));
+            }, 250);
         }
     </script>
 
