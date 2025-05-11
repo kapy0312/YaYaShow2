@@ -159,7 +159,8 @@
 
     <div class="header">
         <div class="question" id="question">載入中...</div>
-        <button class="next-btn" onclick="nextQuestion()">下一題</button>
+        <button class="next-btn" onclick="backQuestion()">上一題</button>
+        <button class="next-btn" onclick="nextQuestion()" style="margin-left: 20px;">下一題</button>
     </div>
 
     <div class="options">
@@ -179,6 +180,7 @@
 
     <script>
         const STR = [
+            "0. 請問天竺鼠車車的保險要保哪種？(示範題)",
             "1. 請問如果給你選擇霧眉方案，你會優先考慮哪種？",
             "2. 請問以下哪隻熊最聰明？",
             "3. 請問以下傳說對決的角色，哪隻你最強？",
@@ -213,7 +215,7 @@
 
         // 顯示題目與圖片
         function showQuestion(index) {
-            const num = index + 1; // 題號從1開始
+            const num = index; // 題號從0開始
             questionEl.textContent = STR[index];
             imgA.src = `img/Topic/P${num}_A.png`;
             imgB.src = `img/Topic/P${num}_B.png`;
@@ -222,6 +224,16 @@
 
             // 清除選取狀態
             options.forEach(o => o.classList.remove('selected'));
+        }
+
+        // 上一題邏輯
+        function backQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showQuestion(currentIndex);
+            } else {
+                alert("已經是第零題了！");
+            }
         }
 
         // 下一題邏輯

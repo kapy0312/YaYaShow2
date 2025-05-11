@@ -1,64 +1,60 @@
 <!DOCTYPE html>
-<html lang="zh-tw">
+<html lang="zh-Hant">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>錡陞夜夜秀</title>
+    <title>雅一最懂你</title>
     <style>
+        html,
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            /* 底層背景圖片 */
-            background-image: url('img/1_Background.png');
-            background-size: contain;
-            /* 使整張圖片入鏡 */
-            background-position: center;
-            /* 圖片在視窗中置中 */
-            background-repeat: no-repeat;
-            /* 不重複背景圖片 */
-            height: 100vh;
-            /* 使背景圖片的高度為視窗高度 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #000;
-            /* 當圖片不覆蓋視窗全部時，用黑色背景填補 */
+            overflow: hidden;
         }
 
-        #floatButton {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
-            color: white;
-            padding: 28px 40px;
+        #startBtn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ffcc00;
             border: none;
-            border-radius: 50px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 32px;
-            z-index: 1000;
-            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 9999;
         }
 
-        #floatButton:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
         }
-        
     </style>
-    <!-- 引入 Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- 加入 jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
-    <a href="2_Title.html">
-        <button id="floatButton">Start</button>
-    </a>
+    <!-- 背景音樂 -->
+    <audio id="bgm" src="music/音效_輕音樂.mp3" loop></audio>
+
+    <!-- 開始按鈕（左上角） -->
+    <button id="startBtn">🔊 開啟音樂</button>
+
+    <!-- 主內容 -->
+    <iframe src="1_Home.html" id="mainFrame"></iframe>
+
+    <script>
+        const btn = document.getElementById("startBtn");
+        const bgm = document.getElementById("bgm");
+
+        btn.addEventListener("click", () => {
+            bgm.play().catch(err => {
+                console.warn("播放失敗：", err);
+            });
+            btn.style.display = "none"; // 點擊後隱藏按鈕
+        });
+    </script>
 </body>
 
 </html>

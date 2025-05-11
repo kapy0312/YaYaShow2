@@ -32,9 +32,9 @@
             <!-- <img src="img/CapsuleToy/header-leftup.png" class="wow leftup"> -->
             <!-- <img src="img/CapsuleToy/header-leftdown.svg" class="wow leftdown"> -->
             <!-- <img src="img/CapsuleToy/header-rightdown.svg" class="wow rightdown"> -->
-            <!-- <img src="img/CapsuleToy/header-con1.svg" class="con1 con"> -->
-            <!-- <img src="img/CapsuleToy/header-con1.svg" class="con2 con"> -->
-            <!-- <img src="img/CapsuleToy/header-con1.svg" class="con3 con"> -->
+            <img src="img/CapsuleToy/header-con1.svg" class="con1 con">
+            <img src="img/CapsuleToy/header-con1.svg" class="con2 con">
+            <img src="img/CapsuleToy/header-con1.svg" class="con3 con">
 
             <div class="header">
                 <!-- 桌機版扭蛋機 -->
@@ -118,13 +118,28 @@
                 Next
                 <span></span><span></span><span></span><span></span>
             </a> -->
-            <a href="4_Rule.html">
-                <button id="floatButton">Next</button>
-            </a>
+            <audio id="clickSound" src="music/音效_點擊.mp3"></audio>
+            <button id="floatButton">Next</button>
         </main>
 
         <footer>網站為作業練習用無任何商業用途</footer>
     </div>
+    <script>
+        const btn = document.getElementById("floatButton");
+        const sound = document.getElementById("clickSound");
+
+        btn.addEventListener("click", function () {
+            // 播放音效
+            sound.currentTime = 0;
+            sound.play();
+
+            // 等待音效播放 0.5 秒後再跳轉
+            setTimeout(() => {
+                window.location.href = "4_Rule.html";
+            }, 500); // 你可以根據音效長度調整延遲時間
+        });
+    </script>
+
     <script src="js/all.js"></script> <!-- 核心 JS 功能 -->
 </body>
 
