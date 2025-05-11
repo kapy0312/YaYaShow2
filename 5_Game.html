@@ -186,6 +186,7 @@
 
     <audio id="Sound_fireworksCanvas" src="music/音效_煙火.mp3"></audio>
     <audio id="Sound_redSelect" src="music/音效_紅框選取.mp3"></audio>
+    <audio id="Sound_Click" src="music/音效_點擊.mp3"></audio>
 
     <script>
         const STR = [
@@ -208,12 +209,11 @@
         const imgC = document.getElementById("imgC");
         const imgD = document.getElementById("imgD");
         const options = document.querySelectorAll('.option');
-
+        const sound_Red = document.getElementById("Sound_redSelect");
+        const sound_Ck = document.getElementById("Sound_Click");
         // 點選圖片時切換紅框
         options.forEach(option => {
             option.addEventListener('click', () => {
-
-                const sound_Red = document.getElementById("Sound_redSelect");
                 sound_Red.currentTime = 0;
                 sound_Red.play();
 
@@ -242,6 +242,9 @@
 
         // 上一題邏輯
         function backQuestion() {
+            sound_Ck.currentTime = 0;
+            sound_Ck.play();
+
             if (currentIndex > 0) {
                 currentIndex--;
                 showQuestion(currentIndex);
@@ -252,6 +255,9 @@
 
         // 下一題邏輯
         function nextQuestion() {
+            sound_Ck.currentTime = 0;
+            sound_Ck.play();
+
             if (currentIndex < totalQuestions - 1) {
                 currentIndex++;
                 showQuestion(currentIndex);
