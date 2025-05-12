@@ -152,6 +152,75 @@
             border-radius: 8px;
             box-shadow: 2px 2px 6px #aaa;
         }
+
+        #errorOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: opacity 1s ease-out;
+        }
+
+        #errorOverlay.show {
+            opacity: 0.7;
+        }
+
+        .scoreboard {
+            position: absolute;
+            bottom: 400px;
+            right: 30px;
+            width: 260px;
+            /* 原本200px，增加一點寬度 */
+
+            padding: 22px;
+            border: 3px solid #00aaff;
+            border-radius: 15px;
+            background: linear-gradient(to bottom, #e0f7ff, #ffffff);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            color: #003366;
+            font-size: 18px;
+            /* 放大 1.5 倍 */
+        }
+
+        .scoreboard h3 {
+            margin: 0 0 15px 0;
+            text-align: center;
+            font-size: 24px;
+            /* 原本18px，放大 */
+            color: #0077cc;
+        }
+
+        .score-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            justify-content: space-between;
+        }
+
+        .score-row label {
+            flex: 0 0 30px;
+            font-size: 18px;
+            /* 放大文字 */
+        }
+
+        .score-row input {
+            width: 75px;
+            /* 原本50px */
+            padding: 6px 8px;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 18px;
+            /* 放大輸入框文字 */
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
@@ -162,8 +231,8 @@
         <div class="question" id="question">載入中...</div>
         <button class="next-btn" onclick="backQuestion()">上一題</button>
         <button class="next-btn" onclick="nextQuestion()" style="margin-left: 20px;">下一題</button>
-        <button class="next-btn" onclick="fireworks()" style="margin-left: 20px;">答對</button>
-        <button class="next-btn" onclick="fireworks()" style="margin-left: 20px;">答錯</button>
+        <button class="next-btn" onclick="fireworks_O()" style="margin-left: 20px;">答對</button>
+        <button class="next-btn" onclick="fireworks_X()" style="margin-left: 20px;">答錯</button>
     </div>
 
     <div class="options">
@@ -171,6 +240,26 @@
         <div class="option" data-option="B"><img id="imgB" src="" alt="B"></div>
         <div class="option" data-option="C"><img id="imgC" src="" alt="C"></div>
         <div class="option" data-option="D"><img id="imgD" src="" alt="D"></div>
+    </div>
+
+    <div class="scoreboard">
+        <h3>計數板</h3>
+        <div class="score-row">
+            <label>A</label>
+            <input type="number" id="countA" value="0" min="0">
+        </div>
+        <div class="score-row">
+            <label>B</label>
+            <input type="number" id="countB" value="0" min="0">
+        </div>
+        <div class="score-row">
+            <label>C</label>
+            <input type="number" id="countC" value="0" min="0">
+        </div>
+        <div class="score-row">
+            <label>D</label>
+            <input type="number" id="countD" value="0" min="0">
+        </div>
     </div>
 
     <div class="bomb-container">
@@ -181,6 +270,7 @@
         </div>
     </div>
 
+    <img id="errorOverlay" src="img/Challenger/P0.png" onload="console.log('loaded')" />
     <canvas id="fireworksCanvas"
         style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
 
@@ -224,6 +314,35 @@
                     options.forEach(o => o.classList.remove('selected'));
                     option.classList.add('selected');
                 }
+
+                // 讀取各選項分數
+                const scores = {
+                    A: parseInt(document.getElementById('countA').value) || 0,
+                    B: parseInt(document.getElementById('countB').value) || 0,
+                    C: parseInt(document.getElementById('countC').value) || 0,
+                    D: parseInt(document.getElementById('countD').value) || 0
+                };
+
+                // 找出最高分（如果有不只一個最高，則不執行）
+                const entries = Object.entries(scores);
+                const maxScore = Math.max(...entries.map(e => e[1]));
+                const topScorers = entries.filter(e => e[1] === maxScore);
+
+                if (topScorers.length === 1) {
+                    const topAnswer = topScorers[0][0]; // 例如 'A'
+                    const selectedAnswer = option.getAttribute('data-option'); // 假設你有 data-option="A" 這樣的屬性
+
+                    if (selectedAnswer === topAnswer) {
+                        // ✅ 這裡是分數最高而且選到了正確答案 → 執行你要的程式碼
+                        console.log("選到最高分的答案！");
+                        
+                        // 你要執行的程式碼寫在這裡 ↓↓↓↓↓↓
+                        fireworks_O();
+                    }
+                    else{
+                        fireworks_X();
+                    }
+                }
             });
         });
 
@@ -245,6 +364,11 @@
             sound_Ck.currentTime = 0;
             sound_Ck.play();
 
+            document.getElementById('countA').value = 0;
+            document.getElementById('countB').value = 0;
+            document.getElementById('countC').value = 0;
+            document.getElementById('countD').value = 0;
+
             if (currentIndex > 0) {
                 currentIndex--;
                 showQuestion(currentIndex);
@@ -257,6 +381,11 @@
         function nextQuestion() {
             sound_Ck.currentTime = 0;
             sound_Ck.play();
+
+            document.getElementById('countA').value = 0;
+            document.getElementById('countB').value = 0;
+            document.getElementById('countC').value = 0;
+            document.getElementById('countD').value = 0;
 
             if (currentIndex < totalQuestions - 1) {
                 currentIndex++;
@@ -272,6 +401,8 @@
         // 炸彈階段控制
         const bombImage = document.getElementById('bombImage');
         let bombStage = 1;
+        let bombAudio = new Audio('music/音效_引火.mp3'); // 替換為你的 mp3 路徑
+        bombAudio.loop = true;
 
         const bombData = {
             1: { src: 'img/bomb1.png', size: 100 },
@@ -286,12 +417,32 @@
             if (bombStage > 4) bombStage = 4;
 
             const data = bombData[bombStage];
+
+            // 音量對應設定
+            let volumeMap = {
+                1: 0.0,
+                2: 0.25,
+                3: 0.5,
+                4: 1.0
+            };
+            bombAudio.volume = volumeMap[bombStage];
+
+            // 播放邏輯
+            if (bombStage >= 2) {
+                if (bombAudio.paused) {
+                    bombAudio.play().catch(err => console.warn('音訊播放失敗：', err));
+                }
+            } else {
+                bombAudio.pause();
+                bombAudio.currentTime = 0;
+            }
+
             bombImage.src = data.src;
             bombImage.width = data.size;
             bombImage.height = data.size;
         }
 
-        function fireworks() {
+        function fireworks_O() {
             const duration = 2 * 1000;
             const animationEnd = Date.now() + duration;
             const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
@@ -322,6 +473,27 @@
                     origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
                 }));
             }, 250);
+        }
+
+        function fireworks_X() {
+            fireworks_O();
+
+            const overlay = document.getElementById('errorOverlay');
+            // 重新載入圖片（確保每次都能觸發）
+            overlay.style.transition = 'none';
+            overlay.classList.remove('show');
+            void overlay.offsetWidth; // 強制觸發重繪
+            overlay.style.transition = 'opacity 3s ease-out';
+
+            // 加上 show，讓 opacity 從 0 → 0.5
+            overlay.classList.add('show');
+
+            // 三秒後移除 show（變回 opacity: 0）
+            setTimeout(() => {
+                overlay.classList.remove('show');
+            }, 1000);
+
+            changeStage(1);
         }
     </script>
 
